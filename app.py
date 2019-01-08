@@ -14,17 +14,17 @@ with open('./secret.json') as f:
 
 def check(driver):
     try:
-        start_time = time.time()
         driver.get(URL)
         driver.find_element_by_css_selector(ELEMENT).click()
-        driver.implicitly_wait(2)  # 대기
-        driver.switch_to.frame(driver.find_element_by_id('cafe_main'))
-        driver.find_element_by_css_selector(
-            'textarea#cmtinput').send_keys(MSG)
-        driver.find_element_by_css_selector(
-            'button#btn-submit-attendance').click()
-        driver.quit()
-        print((time.time() - start_time), 'success')
+        for i in range(3):
+            start_time = time.time()
+            driver.implicitly_wait(2)  # 대기
+            driver.switch_to.frame(driver.find_element_by_id('cafe_main'))
+            driver.find_element_by_css_selector(
+                'textarea#cmtinput').send_keys(MSG)
+            driver.find_element_by_css_selector(
+                'button#btn-submit-attendance').click()
+            print((time.time() - start_time), 'success')
     except:
         check(driver)
 
