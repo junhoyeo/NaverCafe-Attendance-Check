@@ -1,24 +1,31 @@
 import time
+import json
 import os.path
 import schedule
 from selenium import webdriver
 
-URL = '???'
+# message to write in attendance list
+MSG = '><'
+with open('./secret.json') as f:
+    DATA = json.load(f)
+    URL = DATA['url']
+    ELEMENT = DATA['element']
+
 
 def check(driver):
     try:
         start_time = time.time()
         driver.get(URL)
-        driver.find_element_by_css_selector('a#menuLink46').click()
+        driver.find_element_by_css_selector(ELEMENT).click()
         driver.implicitly_wait(2)  # 대기
         driver.switch_to.frame(driver.find_element_by_id('cafe_main'))
         driver.find_element_by_css_selector(
-            'textarea#cmtinput').send_keys('><')
+            'textarea#cmtinput').send_keys(MSG)
         driver.find_element_by_css_selector(
             'button#btn-submit-attendance').click()
         driver.quit()
         print((time.time() - start_time), 'success')
-    except BaseException:
+    except:
         check(driver)
 
 
@@ -29,7 +36,7 @@ def main():
 
     # login
     driver.get('https://nid.naver.com/nidlogin.login')
-    input('press enter after login')  # 로그인 대기
+    input('🔓 Press ENTER after login')  # 로그인 대기
 
     schedule.every().day.at('00:00').do(check, driver)
     while True:
